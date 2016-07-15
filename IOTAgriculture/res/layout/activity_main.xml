@@ -8,9 +8,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.qwk.iotagriculture.MainActivity" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+    <ImageButton
+	    android:id="@+id/smarthome"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginLeft="40dp"
+	    android:layout_marginTop="80dp"
+	    android:background="#00000000"
+	    android:src="@drawable/ic_launcher" />
 
 </RelativeLayout>

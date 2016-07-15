@@ -22,6 +22,29 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <!-- <activity
+            android:name="com.qwk.iotagriculture.SmartHomeActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+        </activity> -->
+        
+        <activity
+            android:name="com.qwk.iotagriculture.SerialApp" >
+        </activity>
+        
+         <activity
+            android:name="com.qwk.iotagriculture.SmartHost"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+        </activity>
+        
+        
     </application>
+    
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true" />
 
 </manifest>

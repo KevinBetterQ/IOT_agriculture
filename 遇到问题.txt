@@ -1,3 +1,7 @@
 1、电机不能持续转动，只能稍微一转就停止。
 所有情况都实验后，排除节点，代码问题。
 发现：电源供应不好，用了一个不好的USB集线器。
+
+2、eclipse环境不成功
+error: Error: No resource found that matches the given name: attr 'android:windowElevation'.
+：最小版本不兼容，建工程时把最小版本改过来
