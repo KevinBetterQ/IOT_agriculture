@@ -1,0 +1,12 @@
+1、TabSpec与TabHost
+    TabHost相当于浏览器中浏览器分布的集合，而Tabspec则相当于浏览器中的
+每一个分页面。在Android中，每一个TabSpec分布可以是一个组件，也可以
+是一个布局，然后将每一个分页装入TabHost中，TabHost即可将其中的每一
+个分页一并显示出来。
+    监听分页改变事件，具体如下：
+1）使用OnTabChangeListener接口，重写OnTabChanged(String tabId)函数
+2）TabHost绑定监听器
+3）判断OnTabChanged(String tabId)中的tabId参数进行处理事件；这里的
+tabId对应的是实例中每个分页传入的分页ID，而不是TabSpec.setIndicatior()
+设置的标题
+

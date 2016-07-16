@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:drawingCacheQuality="auto"
+    android:background="@drawable/back">
+
+<ImageButton 
+    android:id="@+id/alarmsetting" 
+	android:layout_width="100dp" 
+	android:layout_height="45dp" 
+	android:scaleType="fitXY"
+	android:background="#00000000"
+	android:layout_marginLeft="5dp"
+	android:layout_marginTop="10dp"
+	android:src="@drawable/alarmset"
+    />
+<ImageButton 
+	android:id="@+id/smarthome_tempe" 
+	android:layout_width="130dp" 
+	android:layout_height="130dp" 
+	android:scaleType="fitXY"
+	android:background="#00000000"
+	android:layout_marginLeft="80dp"
+	android:layout_marginTop="25dp"
+	android:src="@drawable/temps"
+	>
+</ImageButton>
+<TextView 
+	android:layout_height="wrap_content" 
+	android:id="@+id/smarthome_num1" 
+	android:layout_marginRight="440dp"
+	android:layout_gravity="right"
+	android:layout_marginTop="80dp"
+	android:textColor="#95856e"
+	android:textStyle="bold"
+	android:textSize="30dip"
+	android:text=""
+	android:layout_width="wrap_content">
+</TextView>
+
+<ImageView
+	android:id="@+id/smarthome_sheshidu" 
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:scaleType="fitXY"
+	android:background="#00000000"
+	android:layout_marginLeft="270dip"
+	android:layout_marginTop="80dip"
+	android:src="@drawable/sheshidu"
+	>
+</ImageView>
+
+
+<ImageButton 
+	android:id="@+id/smarthome_humi" 
+	android:layout_width="130dp" 
+	android:layout_height="130dp" 
+	android:scaleType="fitXY"
+	android:background="#00000000"
+	android:layout_marginLeft="80dp"
+	android:layout_marginTop="130dp"
+	android:src="@drawable/an"
+	>
+</ImageButton>
+<TextView 
+	android:layout_height="wrap_content" 
+	android:id="@+id/smarthome_num2" 
+	android:layout_marginRight="440dp"
+	android:layout_gravity="right"
+	android:layout_marginTop="175dp"
+	android:textColor="#95856e"
+	android:text=""
+	android:textStyle="bold"
+	android:textSize="30dip"
+	android:layout_width="wrap_content">
+</TextView>
+
+<ImageView
+	android:id="@+id/smarthome_percent" 
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:scaleType="fitXY"
+	android:background="#00000000"
+	android:layout_marginLeft="260dp"
+	android:layout_marginTop="170dp"
+	android:src="@drawable/percent"
+	>
+</ImageView>
+<ImageView
+	android:id="@+id/smarthome_light" 
+	android:layout_width="80dp" 
+	android:layout_height="80dp" 
+	android:scaleType="fitXY"
+	android:background="#00000000"
+	android:layout_marginLeft="110dp"
+	android:layout_marginTop="270dp"
+	android:src="@drawable/liang"
+	>
+</ImageView>
+<TextView 
+	android:layout_height="wrap_content" 
+	android:id="@+id/smarthome_num3" 
+	android:layout_marginRight="440dp"
+	android:layout_gravity="right"
+	android:layout_marginTop="285dip"
+	android:textColor="#95856e"
+	android:text=""
+	android:textStyle="bold"
+	android:textSize="30dip"
+	android:layout_width="wrap_content">
+	</TextView>
+	
+<ImageView
+	android:id="@+id/smarthome_lx" 
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:scaleType="fitXY"
+	android:background="#00000000"
+	android:layout_marginLeft="260dp"
+	android:layout_marginTop="280dp"
+	android:src="@drawable/lx"
+	>
+</ImageView>
+
+<ImageView 
+	android:id="@+id/smarthome_smoke" 
+	android:layout_width="180dp" 
+	android:layout_height="180dp" 
+	android:scaleType="fitXY"
+	android:background="#00000000"
+	android:layout_marginLeft="440dip"
+	android:layout_marginTop="-21dp"
+	android:src="@drawable/nosmoke"
+	/>
+<ImageView 
+	android:id="@+id/smarthome_smoketext" 
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:scaleType="fitXY"
+	android:background="#00000000"
+	android:layout_marginLeft="410dp"
+	android:layout_marginTop="105dp"
+	android:src="@drawable/undersmoke"
+	/>
+<ImageView 
+	android:id="@+id/smarthome_reshidianpic" 
+	android:layout_width="180dp" 
+	android:layout_height="180dp" 
+	android:scaleType="fitXY"
+	android:background="#00000000"
+	android:layout_marginLeft="525dp"
+	android:layout_marginTop="147dp"
+	android:src="@drawable/nobody"
+	/>
+<ImageView 
+	android:id="@+id/smarthome_reshidian" 
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:scaleType="fitXY"
+	android:background="#00000000"
+	android:layout_marginLeft="550dp"
+	android:layout_marginTop="300dp"
+	android:src="@drawable/noone"
+	/>
+<ImageView 
+	android:id="@+id/smarthomeengin" 
+	android:background="@drawable/stop"
+	android:layout_width="180dp" 
+	android:layout_height="180dp" 
+	android:layout_marginLeft="368dp"
+	android:layout_marginTop="160dp" /> 
+<Button
+    android:id="@+id/smart_btnforward"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="378dp"
+    android:layout_marginTop="320dp"
+    android:background="@drawable/zheng_selector" />
+<Button
+    android:id="@+id/smart_btnstop"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="428dip"
+    android:layout_marginTop="320dp"
+    android:background="@drawable/ting_selector" />
+<Button
+    android:id="@+id/smart_btnback"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="478dp"
+    android:layout_marginTop="320dp"
+    android:background="@drawable/fan_selector" />
+
+</FrameLayout>
+
