@@ -124,7 +124,7 @@
 	>
 </ImageView>
 
-<ImageView 
+<!-- <ImageView 
 	android:id="@+id/smarthome_smoke" 
 	android:layout_width="180dp" 
 	android:layout_height="180dp" 
@@ -133,18 +133,18 @@
 	android:layout_marginLeft="440dip"
 	android:layout_marginTop="-21dp"
 	android:src="@drawable/nosmoke"
-	/>
+	/> -->
 <ImageView 
 	android:id="@+id/smarthome_smoketext" 
 	android:layout_width="wrap_content" 
 	android:layout_height="wrap_content" 
 	android:scaleType="fitXY"
 	android:background="#00000000"
-	android:layout_marginLeft="410dp"
+	android:layout_marginLeft="510dp"
 	android:layout_marginTop="105dp"
 	android:src="@drawable/undersmoke"
 	/>
-<ImageView 
+<!-- <ImageView 
 	android:id="@+id/smarthome_reshidianpic" 
 	android:layout_width="180dp" 
 	android:layout_height="180dp" 
@@ -153,45 +153,17 @@
 	android:layout_marginLeft="525dp"
 	android:layout_marginTop="147dp"
 	android:src="@drawable/nobody"
-	/>
+	/> -->
 <ImageView 
 	android:id="@+id/smarthome_reshidian" 
 	android:layout_width="wrap_content" 
 	android:layout_height="wrap_content" 
 	android:scaleType="fitXY"
 	android:background="#00000000"
-	android:layout_marginLeft="550dp"
+	android:layout_marginLeft="510dp"
 	android:layout_marginTop="300dp"
 	android:src="@drawable/noone"
-	/>
-<ImageView 
-	android:id="@+id/smarthomeengin" 
-	android:background="@drawable/stop"
-	android:layout_width="180dp" 
-	android:layout_height="180dp" 
-	android:layout_marginLeft="368dp"
-	android:layout_marginTop="160dp" /> 
-<Button
-    android:id="@+id/smart_btnforward"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="378dp"
-    android:layout_marginTop="320dp"
-    android:background="@drawable/zheng_selector" />
-<Button
-    android:id="@+id/smart_btnstop"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="428dip"
-    android:layout_marginTop="320dp"
-    android:background="@drawable/ting_selector" />
-<Button
-    android:id="@+id/smart_btnback"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="478dp"
-    android:layout_marginTop="320dp"
-    android:background="@drawable/fan_selector" />
+	/>>
 
 </FrameLayout>
 

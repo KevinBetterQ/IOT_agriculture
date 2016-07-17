@@ -55,8 +55,6 @@ public class SmartHost extends TabActivity implements OnTabChangeListener{
 		// TODO Auto-generated method stub
 		
 		if(arg0.equals("TS_VIDEO")){
-			//tsVideo.setIndicator("ÊÓÆµ¼à¿Ø",getResources().getDrawable(R.drawable.tabvideo));
-			//tabget.getChildAt(1).setBackground(getResources().getDrawable(R.drawable.tabvideo));
 			tabhost.getTabWidget().getChildAt(1).setBackgroundDrawable(getResources().getDrawable(R.drawable.videofocus));
 			tabhost.getTabWidget().getChildAt(0).setBackgroundDrawable(getResources().getDrawable(R.drawable.homeunfocus));
 			//tsHome.setIndicator("",null);

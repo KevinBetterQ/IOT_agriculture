@@ -12,6 +12,6 @@
         android:layout_height="fill_parent"
         android:background="#C1FFC1"
         android:textSize="25dp"
-        android:text="制作：Kevin亓\n\n专业：物联网工程" />
+        android:text="制作：亓文凯\n\n专业：物联网工程" />
 
 </FrameLayout>

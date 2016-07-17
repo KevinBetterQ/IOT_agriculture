@@ -30,18 +30,17 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 	private TextView tvTemp;
 	private TextView tvHumi;
 	private TextView tvCandela;
-	private Button btnForward;//电机正转按钮
-	private Button btnStop;//电机停止按钮
-	private Button btnReverse;//电机逆转按钮
+	
 	private ImageButton ibsetting;//界面的设置按钮
 	private ImageView ivSomke;
 	private ImageView ivHuman;
 	private ImageView ivHumamPic;
 	private ImageView ivEngineStatus;
+	
 	private EditText etAlarmphone;
 	private LinearLayout dlglayout;
 	SharedPreferences alarmsetsp;
-	protected OutputStream mOutputStream;
+	//protected OutputStream mOutputStream;
 	private boolean bFlgContrlcmd;
 	SmarthomeRec smarthomeRec;
 	byte cmd[] = {(byte)0x40, (byte)0x06, (byte)0x01, (byte)0x06, 
@@ -58,16 +57,11 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 		tvTemp = (TextView)findViewById(R.id.smarthome_num1);
 		tvHumi = (TextView)findViewById(R.id.smarthome_num2);
 		tvCandela = (TextView)findViewById(R.id.smarthome_num3);
-		ivSomke = (ImageView)findViewById(R.id.smarthome_smoke);
+		ivSomke = (ImageView)findViewById(R.id.smarthome_smoketext);
 		ivHuman = (ImageView)findViewById(R.id.smarthome_reshidian);
-		ivHumamPic = (ImageView)findViewById(R.id.smarthome_reshidianpic);
+		//ivHumamPic = (ImageView)findViewById(R.id.smarthome_reshidianpic);
 		ivEngineStatus = (ImageView)findViewById(R.id.smarthomeengin);
-		btnForward = (Button)findViewById(R.id.smart_btnforward);
-		btnStop = (Button)findViewById(R.id.smart_btnstop);
-		btnReverse = (Button)findViewById(R.id.smart_btnback);
-		btnForward.setOnClickListener(this);
-		btnStop.setOnClickListener(this);
-		btnReverse.setOnClickListener(this);
+		
 		ibsetting = (ImageButton)findViewById(R.id.alarmsetting);
 		ibsetting.setOnClickListener(this);
 		
@@ -75,19 +69,14 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 		smarthomeRec = new SmarthomeRec();
 		IntentFilter filter = new IntentFilter("com.skzh.iot.smarthome");
 		registerReceiver(smarthomeRec, filter);//当意图过滤器和系统当前发送的广播吻合时，就会直接执行广播接受者，这里也就是smarthomeRec
-		mOutputStream = MainActivity.mOutputStream;
+		//mOutputStream = MainActivity.mOutputStream;
 	}
 	
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		if(v==btnForward){//发送指令让电机正转
-			cmd[4] = 0x0a;
-		}else if(v==btnReverse){//发送指令让电机逆转
-			cmd[4] = 0x0b;
-		}else if(v==btnStop){//发送指令让电机停止
-			cmd[4] = 0x0c;
-		}else if(v==ibsetting){//设置报警手机号
+		
+		if(v==ibsetting){//设置报警手机号
 			dlglayout = (LinearLayout)getLayoutInflater().inflate(R.layout.alarmset, null);
 			etAlarmphone = (EditText)dlglayout.findViewById(R.id.etalarmset);
 			new AlertDialog.Builder(this).setTitle("报警手机号设置").setView(dlglayout).setPositiveButton("保存",
@@ -122,12 +111,12 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
      	 suma+= cmd[i];
          }
         cmd[cmd.length-1] = suma; 
-        try {
+        /*try {
 			mOutputStream.write(cmd);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 	//自定义一个广播接收器
@@ -173,29 +162,15 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
             				manager_sms.sendTextMessage(str, null, "检测到有人入侵，请查看监控！", null, null);
             			}*/
             			image = getResources().getDrawable(R.drawable.hasone); 
-            			ivHumamPic.setImageDrawable(getResources().getDrawable(R.drawable.somebody));
+            			//ivHumamPic.setImageDrawable(getResources().getDrawable(R.drawable.somebody));
             		}else if(isdoppler==(byte)0x00){
             			image = getResources().getDrawable(R.drawable.noone);
-            			ivHumamPic.setImageDrawable(getResources().getDrawable(R.drawable.nobody));
+            			//ivHumamPic.setImageDrawable(getResources().getDrawable(R.drawable.nobody));
             		}
             		ivHuman.setImageDrawable(image);
 					break;
 				}
-				case 6://电机
-				{
-					int engineStatus = intent.getIntExtra("engine", 0);
-					Drawable image=null;
-            		if((engineStatus&0x08) == 0x08){//电机正传
-            			image = getResources().getDrawable(R.drawable.forward);
-            		}else if((engineStatus&0x04)==0x04){//电机反传
-            			image = getResources().getDrawable(R.drawable.for_back);
-            		}else if(((0xff&engineStatus)|0xf3)==0xf3){//电机停止
-            			image = getResources().getDrawable(R.drawable.stop);
-            		}
-            		//stopCommand.setBackgroundDrawable(image);
-            		ivEngineStatus.setImageDrawable(image);
-					break;
-				}
+				
 				default:
 					break;
 				
