@@ -1,8 +1,13 @@
 
 package com.example.skzh;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
 import java.text.DecimalFormat;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,6 +18,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
@@ -40,11 +46,15 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 	private EditText etAlarmphone;
 	private LinearLayout dlglayout;
 	SharedPreferences alarmsetsp;
-	//protected OutputStream mOutputStream;
+	protected OutputStream mOutputStream;
 	private boolean bFlgContrlcmd;
 	SmarthomeRec smarthomeRec;
 	byte cmd[] = {(byte)0x40, (byte)0x06, (byte)0x01, (byte)0x06, 
 			(byte)0x0c,(byte)0x05};//传递给串口的指令
+	
+	Socket socket = null;
+    BufferedWriter writer = null;
+    BufferedReader reader = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,13 +75,118 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 		ibsetting = (ImageButton)findViewById(R.id.alarmsetting);
 		ibsetting.setOnClickListener(this);
 		
+		//连接socket
+		connect();
+		
 		//创建广播接收器
 		smarthomeRec = new SmarthomeRec();
 		IntentFilter filter = new IntentFilter("com.skzh.iot.smarthome");
 		registerReceiver(smarthomeRec, filter);//当意图过滤器和系统当前发送的广播吻合时，就会直接执行广播接受者，这里也就是smarthomeRec
-		//mOutputStream = MainActivity.mOutputStream;
+		mOutputStream = MainActivity.mOutputStream;
+		
+		
+		
+		
 	}
 	
+	//开了一个线程进行socket连接
+	private void connect() {
+		
+		AsyncTask<Void, String, Void> read = new AsyncTask<Void, String, Void>(){
+
+			@Override
+			protected Void doInBackground(Void... params) {
+				try {
+					socket = new Socket("182.254.130.103", 2348);
+					writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+					reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+					publishProgress("connect success");
+				} catch (Exception e) {
+					Toast.makeText(SmartHomeActivity.this, "连接服务器失败", Toast.LENGTH_SHORT).show();
+				}
+				
+				
+                try {
+                	String line;
+					while ((line = reader.readLine())!= null) {
+						System.out.println(line);
+					    publishProgress(line);
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+				
+				return null;
+			}
+			
+			@Override
+			protected void onProgressUpdate(String... values) {
+				if (values[0].equals("connect success")) {
+                    Toast.makeText(SmartHomeActivity.this, "连接服务器成功", Toast.LENGTH_SHORT).show();
+
+                }
+				else if (values[0].equals("dianjikai")) {
+					
+					//判断电机是否是关的
+					if(bFlgContrlcmd == false){
+						cmd[4] = 0x0a;
+						//下发控制指令标志
+				        byte suma=0;
+				        for (int i = 0; i < cmd.length-1; i++) 
+				         {
+				     	 suma+= cmd[i];
+				         }
+				        cmd[cmd.length-1] = suma; 
+				       
+							try {
+								System.out.println("kkkkkkkkkkk\n");
+								mOutputStream.write(cmd);
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+						bFlgContrlcmd = true;
+					}
+					
+                }
+				else if (values[0].equals("dianjiguan")) {
+					
+					//判断电机是否是开的
+					if(bFlgContrlcmd == true){
+						cmd[4] = 0x0c;
+						//下发控制指令标志
+				        byte suma=0;
+				        for (int i = 0; i < cmd.length-1; i++) 
+				         {
+				     	 suma+= cmd[i];
+				         }
+				        cmd[cmd.length-1] = suma; 
+				       
+							try {
+								System.out.println("gggggggggggggg\n");
+								mOutputStream.write(cmd);
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+						bFlgContrlcmd = false;
+					}					
+                }
+				
+				super.onProgressUpdate(values);
+			}
+			
+		};
+		 read.execute();
+	}
+	
+	
+
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
@@ -104,19 +219,22 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 			etAlarmphone.setText(str);
 			return;
 		}
-		bFlgContrlcmd = true;//下发控制指令标志
+		
+		/*bFlgContrlcmd = true;//下发控制指令标志
         byte suma=0;
        for (int i = 0; i < cmd.length-1; i++) 
          {
      	 suma+= cmd[i];
          }
         cmd[cmd.length-1] = suma; 
-        /*try {
-			mOutputStream.write(cmd);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+       
+			try {
+				System.out.println("xxxxxxxxxxxxxxxx\n");
+				mOutputStream.write(cmd);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}*/
 	}
 	
 	//自定义一个广播接收器
@@ -131,11 +249,31 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 			{
 				case 2://温湿度光照
 				{
-        			tvTemp.setText(String.valueOf(intent.getIntExtra("temp", 0)));
-        			tvHumi.setText(String.valueOf(intent.getIntExtra("humi", 0)));//字符串值
+					String wen = String.valueOf(intent.getIntExtra("temp", 0));
+					String shi = String.valueOf(intent.getIntExtra("humi", 0));
+        			tvTemp.setText(wen);
+        			tvHumi.setText(shi);//字符串值
+        			
+        			//光照
         			double dGuangqiang = intent.getDoubleExtra("light", 0.0);
              	    DecimalFormat df = new DecimalFormat("0.0");
-            	    tvCandela.setText(String.valueOf(df.format(dGuangqiang)));
+             	    String guang = String.valueOf(df.format(dGuangqiang));
+            	    tvCandela.setText(guang);
+            	    
+            	  
+        			
+            	    //socket发送
+            	    try {
+						writer.write(wen+"/");
+						writer.write(shi+"/");
+						writer.write(guang+"\n");
+						writer.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+            	    
+       			
 					break;
 				}
 				case 4://烟雾
@@ -177,6 +315,7 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 			}
 		}
 	}
+	
 	
 	@Override
 	protected void onDestroy() {

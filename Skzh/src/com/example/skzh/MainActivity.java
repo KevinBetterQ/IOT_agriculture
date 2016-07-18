@@ -187,6 +187,9 @@ public class MainActivity extends Activity implements OnClickListener {
 
     	public void processData(final byte[] buffer, final int size)
     	{
+    		
+    		System.out.println(buffer[2]);
+    		System.out.println(buffer[3]);
     		switch(buffer[3])
     		{
     			case 0x02://temp
@@ -262,12 +265,17 @@ public class MainActivity extends Activity implements OnClickListener {
 	                	int ipwm = buffer[5];
 		    			intent.putExtra("pwm", ipwm);
 		    			sendBroadcast(intent);
+		    			
+		    			Intent intentSmarthome = new Intent("com.skzh.iot.smarthome");
+		    			intentSmarthome.putExtra("type", 9);
+		    			intentSmarthome.putExtra("pwm", (int)buffer[5]);
+		    			sendBroadcast(intentSmarthome);
     				}//end if 
     				break;
     			
     			case 0x0b:
     			{
-                	//发送广播
+                	//发送广播电流
                 	Intent intent = new Intent("com.skzh.iot.current");
 	    			intent.putExtra("cur1", (int)buffer[5]);
 	    			intent.putExtra("cur2", (int)buffer[7]);
@@ -276,7 +284,7 @@ public class MainActivity extends Activity implements OnClickListener {
     			}
     			case 0x0c:
     			{
-                	//发送广播
+                	//发送广播电压传感
                 	Intent intent = new Intent("com.skzh.iot.voltage");
 	    			intent.putExtra("vol1", (int)buffer[5]);
 	    			intent.putExtra("vol2", (int)buffer[7]);
@@ -286,7 +294,7 @@ public class MainActivity extends Activity implements OnClickListener {
     			case 0x0d:
     			{
 //    			
-	                	//发送广播
+	                	//发送广播电压输出
 	                	Intent intent = new Intent("com.skzh.iot.voloutput");
 		    			intent.putExtra("vol1",(int)buffer[6]);
 		    			intent.putExtra("vol2", (int)buffer[8]);
@@ -295,9 +303,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		    			sendBroadcast(intent);
     				}//end if
     				break;
-    			}
-    		}//end switch
-    	}//end processData
+    			}//end switch
+    		}//end processData
+    	}
     
     
     //处理心跳，判断是否连接上

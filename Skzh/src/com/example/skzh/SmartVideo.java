@@ -1,6 +1,8 @@
 
 package com.example.skzh;
 
+import com.example.skzh.SmartHomeActivity;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
@@ -32,6 +34,11 @@ public class SmartVideo extends Activity implements OnClickListener{
 	private Button btnReverse;//电机逆转按钮
 	private ImageButton ibsetting;//界面的设置按钮
 	
+	//pwm
+	private Button btnpwmadd;
+	private Button btnpwmjj;
+	int num=0;
+	
 	private ImageView ivEngineStatus;
 	private EditText etAlarmphone;
 	private LinearLayout dlglayout;
@@ -39,8 +46,10 @@ public class SmartVideo extends Activity implements OnClickListener{
 	protected OutputStream mOutputStream;
 	private boolean bFlgContrlcmd;
 	SmarthomeRec smarthomeRec;
-	byte cmd[] = {(byte)0x40, (byte)0x06, (byte)0x01, (byte)0x06, 
-			(byte)0x0c,(byte)0x05};//传递给串口的指令
+	byte cmd[] = {(byte)0x40, (byte)0x06, (byte)0x01, (byte)0x09, 
+			(byte)0x09,(byte)0x05};//传递给串口的指令
+	byte cmd2[] = {(byte)0x40, (byte)0x06, (byte)0x01, (byte)0x06, 
+			(byte)0x09,(byte)0x05};//传递给串口的指令
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +57,6 @@ public class SmartVideo extends Activity implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.smartvideo);
 		
-		bFlgContrlcmd = false;//控制指令下发的标识
 		alarmsetsp = getSharedPreferences("alarmphone", Activity.MODE_PRIVATE);
 		
 		btnForward = (Button)findViewById(R.id.smart_btnforward);
@@ -57,9 +65,12 @@ public class SmartVideo extends Activity implements OnClickListener{
 		btnForward.setOnClickListener(this);
 		btnStop.setOnClickListener(this);
 		btnReverse.setOnClickListener(this);
-		
 		ivEngineStatus = (ImageView)findViewById(R.id.smarthomeengin);
 		
+		btnpwmadd = (Button) findViewById(R.id.pwmadd);
+		btnpwmjj = (Button) findViewById(R.id.pwmjj);
+		btnpwmadd.setOnClickListener(this);
+		btnpwmjj.setOnClickListener(this);
 		
 		
 		ibsetting = (ImageButton)findViewById(R.id.alarmsetting);
@@ -76,11 +87,53 @@ public class SmartVideo extends Activity implements OnClickListener{
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		if(v==btnForward){//发送指令让电机正转
-			cmd[4] = 0x0a;
+			cmd2[4] = 0x0a;
+			bFlgContrlcmd = true;
+			byte suma2=0;
+		       for (int i = 0; i < cmd2.length-1; i++) 
+		         {
+		     	 suma2+= cmd2[i];
+		         }
+		        cmd2[cmd2.length-1] = suma2; 
+		       
+					try {
+						mOutputStream.write(cmd2);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 		}else if(v==btnReverse){//发送指令让电机逆转
-			cmd[4] = 0x0b;
+			cmd2[4] = 0x0b;
+			bFlgContrlcmd = true;
+			byte suma2=0;
+		       for (int i = 0; i < cmd2.length-1; i++) 
+		         {
+		     	 suma2+= cmd2[i];
+		         }
+		        cmd2[cmd2.length-1] = suma2; 
+		       
+					try {
+						mOutputStream.write(cmd2);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 		}else if(v==btnStop){//发送指令让电机停止
-			cmd[4] = 0x0c;
+			cmd2[4] = 0x0c;
+			bFlgContrlcmd = false;
+			byte suma2=0;
+		       for (int i = 0; i < cmd2.length-1; i++) 
+		         {
+		     	 suma2+= cmd2[i];
+		         }
+		        cmd2[cmd2.length-1] = suma2; 
+		       
+					try {
+						mOutputStream.write(cmd2);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 		}else if(v==ibsetting){//设置报警手机号
 			dlglayout = (LinearLayout)getLayoutInflater().inflate(R.layout.alarmset, null);
 			etAlarmphone = (EditText)dlglayout.findViewById(R.id.etalarmset);
@@ -109,7 +162,83 @@ public class SmartVideo extends Activity implements OnClickListener{
 			etAlarmphone.setText(str);
 			return;
 		}
-		bFlgContrlcmd = true;//下发控制指令标志
+		else if(v==btnpwmadd){
+			if(num<90)
+			{
+				System.out.println(num);
+				num=num+10;
+				//textCommand.setText(num+"");
+				if(num==0){
+					cmd[4]= 0x00;
+				}
+				if(num==10){
+					cmd[4]= 0x01;
+				}
+				if(num==20){
+					cmd[4]= 0x02;
+				}
+				if(num==30){
+					cmd[4]= 0x03;
+				}
+				if(num==40){
+					cmd[4]= 0x04;
+				}
+				if(num==50){
+					cmd[4]= 0x05;
+				}
+				if(num==60){
+					cmd[4]= 0x06;
+				}
+				if(num==70){
+					cmd[4]= 0x07;
+				}
+				if(num==80){
+					cmd[4]= 0x08;
+				}
+				if(num==90){
+					cmd[4]= 0x09;
+				}
+			}
+		}
+		else if(v==btnpwmjj){
+			if(num>0)
+			{
+				System.out.println(num);
+				num=num-10;
+				//textCommand.setText(num+"");
+				if(num==0){
+					cmd[4]= 0x00;
+				}
+				if(num==10){
+					cmd[4]= 0x01;
+				}
+				if(num==20){
+					cmd[4]= 0x02;
+				}
+				if(num==30){
+					cmd[4]= 0x03;
+				}
+				if(num==40){
+					cmd[4]= 0x04;
+				}
+				if(num==50){
+					cmd[4]= 0x05;
+				}
+				if(num==60){
+					cmd[4]= 0x06;
+				}
+				if(num==70){
+					cmd[4]= 0x07;
+				}
+				if(num==80){
+					cmd[4]= 0x08;
+				}
+				if(num==90){
+					cmd[4]= 0x09;
+				}
+			}
+		}
+		
         byte suma=0;
        for (int i = 0; i < cmd.length-1; i++) 
          {
@@ -123,6 +252,9 @@ public class SmartVideo extends Activity implements OnClickListener{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+		
+
 		
 	}
 	
@@ -153,6 +285,8 @@ public class SmartVideo extends Activity implements OnClickListener{
 	            		//ivEngineStatus.setImageDrawable(image);
 						break;
 					}
+					
+					
 					default:
 						break;
 					
