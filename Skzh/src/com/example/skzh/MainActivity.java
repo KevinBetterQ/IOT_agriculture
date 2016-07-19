@@ -187,9 +187,6 @@ public class MainActivity extends Activity implements OnClickListener {
 
     	public void processData(final byte[] buffer, final int size)
     	{
-    		
-    		System.out.println(buffer[2]);
-    		System.out.println(buffer[3]);
     		switch(buffer[3])
     		{
     			case 0x02://temp

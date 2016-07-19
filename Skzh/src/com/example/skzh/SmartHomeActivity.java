@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.text.DecimalFormat;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -37,7 +38,12 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 	private TextView tvHumi;
 	private TextView tvCandela;
 	
-	private ImageButton ibsetting;//界面的设置按钮
+	//与smartvideo共享的变量值
+	public static int sh_wen;
+	public static int sh_shi;
+	public static double sh_guang;
+	
+	
 	private ImageView ivSomke;
 	private ImageView ivHuman;
 	private ImageView ivHumamPic;
@@ -47,10 +53,13 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 	private LinearLayout dlglayout;
 	SharedPreferences alarmsetsp;
 	protected OutputStream mOutputStream;
-	private boolean bFlgContrlcmd;
+	public static boolean bFlgContrlcmd;//电机开启标志
+	public static boolean bFlgpwm;//pwm开启标志
 	SmarthomeRec smarthomeRec;
 	byte cmd[] = {(byte)0x40, (byte)0x06, (byte)0x01, (byte)0x06, 
-			(byte)0x0c,(byte)0x05};//传递给串口的指令
+			(byte)0x0c,(byte)0x05};//传递给串口的指令 电机
+	byte cmd2[] = {(byte)0x40, (byte)0x06, (byte)0x01, (byte)0x09, 
+			(byte)0x09,(byte)0x05};//传递给串口的指令 pwm
 	
 	Socket socket = null;
     BufferedWriter writer = null;
@@ -61,7 +70,8 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.smarthome);
-		bFlgContrlcmd = false;//控制指令下发的标识
+		bFlgContrlcmd = false;//控制电机指令下发的标识
+		bFlgpwm = false;//pwm控制下发指令
 		alarmsetsp = getSharedPreferences("alarmphone", Activity.MODE_PRIVATE);
 		
 		tvTemp = (TextView)findViewById(R.id.smarthome_num1);
@@ -72,11 +82,8 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 		//ivHumamPic = (ImageView)findViewById(R.id.smarthome_reshidianpic);
 		ivEngineStatus = (ImageView)findViewById(R.id.smarthomeengin);
 		
-		ibsetting = (ImageButton)findViewById(R.id.alarmsetting);
-		ibsetting.setOnClickListener(this);
 		
-		//连接socket
-		connect();
+		
 		
 		//创建广播接收器
 		smarthomeRec = new SmarthomeRec();
@@ -84,7 +91,8 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 		registerReceiver(smarthomeRec, filter);//当意图过滤器和系统当前发送的广播吻合时，就会直接执行广播接受者，这里也就是smarthomeRec
 		mOutputStream = MainActivity.mOutputStream;
 		
-		
+		//连接socket
+		connect();
 		
 		
 	}
@@ -96,21 +104,27 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 
 			@Override
 			protected Void doInBackground(Void... params) {
-				try {
-					socket = new Socket("182.254.130.103", 2348);
-					writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-					reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-					publishProgress("connect success");
-				} catch (Exception e) {
-					Toast.makeText(SmartHomeActivity.this, "连接服务器失败", Toast.LENGTH_SHORT).show();
-				}
+				
+					try {
+						
+						socket = new Socket("182.254.130.103", 2348);
+						writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+						reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+						publishProgress("connect success");
+						
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						Toast.makeText(SmartHomeActivity.this, "连接服务器失败", Toast.LENGTH_SHORT).show();
+						e.printStackTrace();
+					}
 				
 				
+				//读取socket数据
                 try {
                 	String line;
 					while ((line = reader.readLine())!= null) {
-						System.out.println(line);
 					    publishProgress(line);
+					    System.out.println(line);
 					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -124,6 +138,7 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 			
 			@Override
 			protected void onProgressUpdate(String... values) {
+				System.out.println("test");
 				if (values[0].equals("connect success")) {
                     Toast.makeText(SmartHomeActivity.this, "连接服务器成功", Toast.LENGTH_SHORT).show();
 
@@ -177,6 +192,54 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 						bFlgContrlcmd = false;
 					}					
                 }
+				else if (values[0].equals("pwmkai")) {
+					
+					//判断pwm是否是开的
+					if(bFlgpwm == false){
+						cmd2[4] = 0x08;
+						//下发控制指令标志
+				        byte suma=0;
+				        for (int i = 0; i < cmd2.length-1; i++) 
+				         {
+				     	 suma+= cmd2[i];
+				         }
+				        cmd2[cmd2.length-1] = suma; 
+				       
+							try {
+								System.out.println("pwmkkkkk\n");
+								mOutputStream.write(cmd2);
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+						bFlgpwm = true;
+					}					
+                }
+				else if (values[0].equals("pwmguan")) {
+					
+					//判断pwm是否是开的
+					if(bFlgpwm == true){
+						cmd2[4] = 0x00;
+						//下发控制指令标志
+				        byte suma=0;
+				        for (int i = 0; i < cmd2.length-1; i++) 
+				         {
+				     	 suma+= cmd2[i];
+				         }
+				        cmd2[cmd2.length-1] = suma; 
+				       
+							try {
+								System.out.println("pwmggggggg\n");
+								mOutputStream.write(cmd2);
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+						bFlgpwm = false;
+					}					
+                }
 				
 				super.onProgressUpdate(values);
 			}
@@ -190,35 +253,6 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		
-		if(v==ibsetting){//设置报警手机号
-			dlglayout = (LinearLayout)getLayoutInflater().inflate(R.layout.alarmset, null);
-			etAlarmphone = (EditText)dlglayout.findViewById(R.id.etalarmset);
-			new AlertDialog.Builder(this).setTitle("报警手机号设置").setView(dlglayout).setPositiveButton("保存",
-					new DialogInterface.OnClickListener() {
-						
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							// TODO Auto-generated method stub
-							
-							SharedPreferences.Editor editor = alarmsetsp.edit();
-							editor.putString("phonenum", etAlarmphone.getText().toString());
-							editor.commit();
-							Toast.makeText(SmartHomeActivity.this, "保存成功.", Toast.LENGTH_SHORT).show();
-						}
-					}).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-						
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							// TODO Auto-generated method stub
-							
-							return;
-						}
-					}).show();
-			String str = alarmsetsp.getString("phonenum", "");
-			etAlarmphone.setText(str);
-			return;
-		}
 		
 		/*bFlgContrlcmd = true;//下发控制指令标志
         byte suma=0;
@@ -249,12 +283,15 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 			{
 				case 2://温湿度光照
 				{
+					sh_wen = intent.getIntExtra("temp", 0);
+					sh_shi = intent.getIntExtra("humi", 0);
 					String wen = String.valueOf(intent.getIntExtra("temp", 0));
 					String shi = String.valueOf(intent.getIntExtra("humi", 0));
         			tvTemp.setText(wen);
         			tvHumi.setText(shi);//字符串值
         			
         			//光照
+        			sh_guang = intent.getDoubleExtra("light", 0.0);
         			double dGuangqiang = intent.getDoubleExtra("light", 0.0);
              	    DecimalFormat df = new DecimalFormat("0.0");
              	    String guang = String.valueOf(df.format(dGuangqiang));
@@ -291,21 +328,30 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 				case 5://红外
 				{
 					int isdoppler = intent.getIntExtra("doppler", 0);
+					String people=null;
 					Drawable image=null;
             		if(isdoppler==(byte)0x01){
             			SmsManager manager_sms = SmsManager.getDefault();
             			String str = alarmsetsp.getString("phonenum", "");
-            			/*if(!str.isEmpty())//设置了报警手机才发发送报警短信
-            			{
-            				manager_sms.sendTextMessage(str, null, "检测到有人入侵，请查看监控！", null, null);
-            			}*/
+            			people="youren";
             			image = getResources().getDrawable(R.drawable.hasone); 
-            			//ivHumamPic.setImageDrawable(getResources().getDrawable(R.drawable.somebody));
+            			
             		}else if(isdoppler==(byte)0x00){
             			image = getResources().getDrawable(R.drawable.noone);
-            			//ivHumamPic.setImageDrawable(getResources().getDrawable(R.drawable.nobody));
+            			people="meiren";
+            			
             		}
             		ivHuman.setImageDrawable(image);
+            		
+            		//socket发送
+            	    try {
+						writer.write(people);
+						writer.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+            		
 					break;
 				}
 				
