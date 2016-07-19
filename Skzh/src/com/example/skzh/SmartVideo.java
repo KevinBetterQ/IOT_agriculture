@@ -138,6 +138,15 @@ public class SmartVideo extends Activity implements OnClickListener{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					
+					//向
+					try {
+						SmartHomeActivity.writer.write("kmotor");
+						SmartHomeActivity.writer.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 		}else if(v==btnReverse){//发送指令让电机逆转
 			cmd2[4] = 0x0b;
 			SmartHomeActivity.bFlgContrlcmd = true;
@@ -154,6 +163,15 @@ public class SmartVideo extends Activity implements OnClickListener{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					
+					//向
+					try {
+						SmartHomeActivity.writer.write("kmotor");
+						SmartHomeActivity.writer.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 		}else if(v==btnStop){//发送指令让电机停止
 			cmd2[4] = 0x0c;
 			SmartHomeActivity.bFlgContrlcmd = false;
@@ -166,6 +184,15 @@ public class SmartVideo extends Activity implements OnClickListener{
 		       
 					try {
 						mOutputStream.write(cmd2);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					//向
+					try {
+						SmartHomeActivity.writer.write("gmotor");
+						SmartHomeActivity.writer.flush();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -221,18 +248,50 @@ public class SmartVideo extends Activity implements OnClickListener{
 				if(num==50){
 					cmd[4]= 0x05;
 					SmartHomeActivity.bFlgpwm=true;
+					//向
+					try {
+						SmartHomeActivity.writer.write("kpwm");
+						SmartHomeActivity.writer.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				if(num==60){
 					cmd[4]= 0x06;
 					SmartHomeActivity.bFlgpwm=true;
+					//向
+					try {
+						SmartHomeActivity.writer.write("kpwm");
+						SmartHomeActivity.writer.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				if(num==70){
 					cmd[4]= 0x07;
 					SmartHomeActivity.bFlgpwm=true;
+					//向
+					try {
+						SmartHomeActivity.writer.write("kpwm");
+						SmartHomeActivity.writer.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				if(num==80){
 					cmd[4]= 0x08;
 					SmartHomeActivity.bFlgpwm=true;
+					//向
+					try {
+						SmartHomeActivity.writer.write("kpwm");
+						SmartHomeActivity.writer.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				if(num==90){
 					cmd[4]= 0x09;
@@ -248,18 +307,50 @@ public class SmartVideo extends Activity implements OnClickListener{
 				if(num==0){
 					cmd[4]= 0x00;
 					SmartHomeActivity.bFlgpwm=false;
+					//向
+					try {
+						SmartHomeActivity.writer.write("gpwm");
+						SmartHomeActivity.writer.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				if(num==10){
 					cmd[4]= 0x01;
 					SmartHomeActivity.bFlgpwm=false;
+					//向
+					try {
+						SmartHomeActivity.writer.write("gpwm");
+						SmartHomeActivity.writer.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				if(num==20){
 					cmd[4]= 0x02;
 					SmartHomeActivity.bFlgpwm=false;
+					//向
+					try {
+						SmartHomeActivity.writer.write("gpwm");
+						SmartHomeActivity.writer.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				if(num==30){
 					cmd[4]= 0x03;
 					SmartHomeActivity.bFlgpwm=false;
+					//向
+					try {
+						SmartHomeActivity.writer.write("gpwm");
+						SmartHomeActivity.writer.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				if(num==40){
 					cmd[4]= 0x04;

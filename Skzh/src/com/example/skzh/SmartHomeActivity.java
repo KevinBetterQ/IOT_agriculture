@@ -62,7 +62,7 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 			(byte)0x09,(byte)0x05};//传递给串口的指令 pwm
 	
 	Socket socket = null;
-    BufferedWriter writer = null;
+	public static BufferedWriter writer = null;
     BufferedReader reader = null;
 	
 	@Override
@@ -131,14 +131,79 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 					e.printStackTrace();
 				}
 				
-				
-				
 				return null;
 			}
 			
 			@Override
 			protected void onProgressUpdate(String... values) {
-				System.out.println("test");
+				//System.out.println("test");
+				
+				//智能模式的判断
+				if(SmartVideo.isms == true){
+					System.out.println("hhhh");
+					if(sh_wen >= 30){
+						if(bFlgContrlcmd == false){
+							cmd[4] = 0x0a;
+							//下发控制指令标志
+					        byte suma=0;
+					        for (int i = 0; i < cmd.length-1; i++) 
+					         {
+					     	 suma+= cmd[i];
+					         }
+					        cmd[cmd.length-1] = suma; 
+					       
+								try {
+									mOutputStream.write(cmd);
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								
+							bFlgContrlcmd = true;
+							 //socket发送
+		            	    try {
+								writer.write("kmotor");
+								writer.flush();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					}
+					if(sh_guang <= 60.0){
+						//判断pwm是否是关的
+						if(bFlgpwm == false){
+							cmd2[4] = 0x08;
+							//下发控制指令标志
+					        byte suma=0;
+					        for (int i = 0; i < cmd2.length-1; i++) 
+					         {
+					     	 suma+= cmd2[i];
+					         }
+					        cmd2[cmd2.length-1] = suma; 
+					       
+								try {
+									mOutputStream.write(cmd2);
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								
+							bFlgpwm = true;
+							 //socket发送
+		            	    try {
+								writer.write("kpwm");
+								writer.flush();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}					
+					}
+				}
+				
+				
+				
 				if (values[0].equals("connect success")) {
                     Toast.makeText(SmartHomeActivity.this, "连接服务器成功", Toast.LENGTH_SHORT).show();
 
@@ -253,22 +318,7 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		
-		/*bFlgContrlcmd = true;//下发控制指令标志
-        byte suma=0;
-       for (int i = 0; i < cmd.length-1; i++) 
-         {
-     	 suma+= cmd[i];
-         }
-        cmd[cmd.length-1] = suma; 
-       
-			try {
-				System.out.println("xxxxxxxxxxxxxxxx\n");
-				mOutputStream.write(cmd);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
+		System.out.println("test");
 	}
 	
 	//自定义一个广播接收器
