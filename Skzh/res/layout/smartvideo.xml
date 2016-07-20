@@ -18,14 +18,14 @@
 	
 <Button
     android:id="@+id/xt_tongfeng"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="125dp"
+    android:layout_height="50dp"
     android:layout_marginLeft="150dp"
     android:layout_marginTop="70dp"
     android:text="通风系统："
-    android:textSize="20dp"
-     />
-	
+    android:textSize="23dp" 
+    android:background="#80BBFFFF"
+    android:textColor="#FFFFFF"/>
 
 <Button
     android:id="@+id/smart_btnforward"
@@ -51,28 +51,32 @@
 
 <Button
     android:id="@+id/xt_buguang"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="125dp"
+    android:layout_height="50dp"
     android:layout_marginLeft="150dp"
     android:layout_marginTop="160dp"
     android:text="补光系统："
-    android:textSize="20dp"
+    android:textSize="23dp"
+    android:background="#807FFF00"
+    android:textColor="#FFFF00"
      />
 
 <Button
     android:id="@+id/pwmadd"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="50dp"
+    android:layout_height="45dp"
     android:layout_marginLeft="350dp"
     android:layout_marginTop="160dp"
+    android:background="#80FFFF00"
     android:text="补光" />
 
 <Button
     android:id="@+id/pwmjj"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="50dp"
+    android:layout_height="45dp"
     android:layout_marginLeft="420dp"
     android:layout_marginTop="160dp"
+    android:background="#80EEEE00"
     android:text="遮光" />
 
 <CheckBox
@@ -84,12 +88,14 @@
     android:text="开启" />
 <Button
     android:id="@+id/xt_moshi"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="125dp"
+    android:layout_height="50dp"
     android:layout_marginLeft="150dp"
     android:layout_marginTop="250dp"
-    android:text="智 能 模 式"
-    android:textSize="20dp"
+    android:text="智能模式"
+    android:textSize="23dp"
+    android:background="#8087CEFA"
+    android:textColor="#0000FF"
      />
 
 <EditText
@@ -112,7 +118,21 @@
     android:hint="最低光照值"
     />
 
+<AnalogClock
+    android:id="@+id/analogClock1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
 
+<DigitalClock
+    android:id="@+id/digitalClock1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="DigitalClock" 
+    android:textSize="10pt"
+    android:textColor="#FFCC00"
+    android:layout_marginLeft="35dp"
+    android:layout_marginTop="160dp"
+    />
 
 </FrameLayout>
 
