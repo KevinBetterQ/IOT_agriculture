@@ -42,21 +42,26 @@ public class SmartVideo extends Activity implements OnClickListener{
 	private Button btnForward;//电机正转按钮
 	private Button btnStop;//电机停止按钮
 	private Button btnReverse;//电机逆转按钮
-	private ImageButton ibsetting;//界面的设置按钮
 	
 	//pwm
 	private Button btnpwmadd;
 	private Button btnpwmjj;
-	int num=0;
+	public static int num=0;
 	private boolean ispwm;//智能模式pwm开关判断
 	
 	//模式
 	private CheckBox ms;
 	public static boolean isms;
 	private ImageView ivEngineStatus;
-	private EditText etAlarmphone;
-	private LinearLayout dlglayout;
-	SharedPreferences alarmsetsp;
+	
+	//设置
+	private EditText et_wendu;
+	private EditText et_guang;
+	//从edittext获取出来的数值
+	public static int sz_wendu;
+	public static double sz_guang;
+	
+
 	protected OutputStream mOutputStream;
 	//private boolean bFlgContrlcmd;
 	SmarthomeRec smarthomeRec;
@@ -72,7 +77,6 @@ public class SmartVideo extends Activity implements OnClickListener{
 		setContentView(R.layout.smartvideo);
 		
 		isms=false;
-		alarmsetsp = getSharedPreferences("alarmphone", Activity.MODE_PRIVATE);
 		
 		btnForward = (Button)findViewById(R.id.smart_btnforward);
 		btnStop = (Button)findViewById(R.id.smart_btnstop);
@@ -87,6 +91,11 @@ public class SmartVideo extends Activity implements OnClickListener{
 		btnpwmadd.setOnClickListener(this);
 		btnpwmjj.setOnClickListener(this);
 		
+		et_wendu = (EditText) findViewById(R.id.et_wendu);
+		et_guang = (EditText) findViewById(R.id.et_guang);
+		sz_wendu = 30;
+		sz_guang = 60.0;
+		
 		ms = (CheckBox) findViewById(R.id.checkBox);
 		ms.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
@@ -96,6 +105,21 @@ public class SmartVideo extends Activity implements OnClickListener{
 				if(isChecked){
 					Toast.makeText(SmartVideo.this, "智能模式开启", Toast.LENGTH_SHORT).show();
 					isms = true;
+					String ss = et_wendu.getText().toString();
+					if("".equals(ss)){
+						ss="30";
+					}
+					sz_wendu = Integer.parseInt(ss);
+					
+					String ww = et_guang.getText().toString();
+					System.out.println(ww);
+					if("".equals(ww)){
+						sz_guang = 60.0;
+					}else{
+						sz_guang = Double.valueOf(ww);
+					}
+					
+					
 					if(isms) System.out.println("moshitrue");
 				}else{
 					Toast.makeText(SmartVideo.this, "智能模式关闭", Toast.LENGTH_SHORT).show();
@@ -106,8 +130,7 @@ public class SmartVideo extends Activity implements OnClickListener{
 		});
 		
 		
-		ibsetting = (ImageButton)findViewById(R.id.alarmsetting);
-		ibsetting.setOnClickListener(this);
+		
 		
 		//创建广播接收器
 		smarthomeRec = new SmarthomeRec();
@@ -123,6 +146,7 @@ public class SmartVideo extends Activity implements OnClickListener{
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		if(v==btnForward){//发送指令让电机正转
+			isms=false;
 			cmd2[4] = 0x0a;
 			SmartHomeActivity.bFlgContrlcmd = true;
 			byte suma2=0;
@@ -148,6 +172,7 @@ public class SmartVideo extends Activity implements OnClickListener{
 						e.printStackTrace();
 					}
 		}else if(v==btnReverse){//发送指令让电机逆转
+			isms=false;
 			cmd2[4] = 0x0b;
 			SmartHomeActivity.bFlgContrlcmd = true;
 			byte suma2=0;
@@ -173,6 +198,7 @@ public class SmartVideo extends Activity implements OnClickListener{
 						e.printStackTrace();
 					}
 		}else if(v==btnStop){//发送指令让电机停止
+			isms=false;
 			cmd2[4] = 0x0c;
 			SmartHomeActivity.bFlgContrlcmd = false;
 			byte suma2=0;
@@ -197,35 +223,32 @@ public class SmartVideo extends Activity implements OnClickListener{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-		}else if(v==ibsetting){//设置报警手机号
-			dlglayout = (LinearLayout)getLayoutInflater().inflate(R.layout.alarmset, null);
-			etAlarmphone = (EditText)dlglayout.findViewById(R.id.etalarmset);
-			new AlertDialog.Builder(this).setTitle("报警手机号设置").setView(dlglayout).setPositiveButton("保存",
-					new DialogInterface.OnClickListener() {
-						
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							// TODO Auto-generated method stub
+			//反应不灵敏，所以再发一次
+			 suma2=0;
+				for (int i = 0; i < cmd2.length-1; i++) 
+				    {
+				     	suma2+= cmd2[i];
+				         }
+				  cmd2[cmd2.length-1] = suma2; 
+				       
+				  	try {
+						mOutputStream.write(cmd2);
+				  		} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+				  		}
 							
-							SharedPreferences.Editor editor = alarmsetsp.edit();
-							editor.putString("phonenum", etAlarmphone.getText().toString());
-							editor.commit();
-							Toast.makeText(SmartVideo.this, "保存成功.", Toast.LENGTH_SHORT).show();
-						}
-					}).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-						
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							// TODO Auto-generated method stub
-							
-							return;
-						}
-					}).show();
-			String str = alarmsetsp.getString("phonenum", "");
-			etAlarmphone.setText(str);
-			return; 
+						//向
+					try {
+								SmartHomeActivity.writer.write("gmotor");
+								SmartHomeActivity.writer.flush();
+						} catch (IOException e) {
+								// TODO Auto-generated catch block
+							e.printStackTrace();
+					}
 		}
 		else if(v==btnpwmadd){
+			isms=false;
 			if(num<90)
 			{
 				num=num+10;
@@ -235,15 +258,51 @@ public class SmartVideo extends Activity implements OnClickListener{
 				}
 				if(num==10){
 					cmd[4]= 0x01;
+					SmartHomeActivity.bFlgpwm=true;
+					//向
+					try {
+						SmartHomeActivity.writer.write("kpwm");
+						SmartHomeActivity.writer.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				if(num==20){
 					cmd[4]= 0x02;
+					SmartHomeActivity.bFlgpwm=true;
+					//向
+					try {
+						SmartHomeActivity.writer.write("kpwm");
+						SmartHomeActivity.writer.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				if(num==30){
 					cmd[4]= 0x03;
+					SmartHomeActivity.bFlgpwm=true;
+					//向
+					try {
+						SmartHomeActivity.writer.write("kpwm");
+						SmartHomeActivity.writer.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				if(num==40){
 					cmd[4]= 0x04;
+					SmartHomeActivity.bFlgpwm=true;
+					//向
+					try {
+						SmartHomeActivity.writer.write("kpwm");
+						SmartHomeActivity.writer.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				if(num==50){
 					cmd[4]= 0x05;
@@ -299,12 +358,13 @@ public class SmartVideo extends Activity implements OnClickListener{
 			}
 		}
 		else if(v==btnpwmjj){
-			if(num>0)
+			isms=false;
+			if(num>=-20)
 			{
 				System.out.println(num);
 				num=num-10;
 				//textCommand.setText(num+"");
-				if(num==0){
+				if(num<=0){
 					cmd[4]= 0x00;
 					SmartHomeActivity.bFlgpwm=false;
 					//向
@@ -342,15 +402,6 @@ public class SmartVideo extends Activity implements OnClickListener{
 				}
 				if(num==30){
 					cmd[4]= 0x03;
-					SmartHomeActivity.bFlgpwm=false;
-					//向
-					try {
-						SmartHomeActivity.writer.write("gpwm");
-						SmartHomeActivity.writer.flush();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 				}
 				if(num==40){
 					cmd[4]= 0x04;

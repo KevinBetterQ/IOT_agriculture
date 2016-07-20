@@ -14,14 +14,14 @@
 	android:layout_width="180dp" 
 	android:layout_height="180dp" 
 	android:layout_marginLeft="500dp"
-	android:layout_marginTop="40dp" /> 
+	android:layout_marginTop="30dp" /> 
 	
 <Button
     android:id="@+id/xt_tongfeng"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginLeft="150dp"
-    android:layout_marginTop="100dp"
+    android:layout_marginTop="70dp"
     android:text="通风系统："
     android:textSize="20dp"
      />
@@ -32,21 +32,21 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginLeft="350dp"
-    android:layout_marginTop="100dp"
+    android:layout_marginTop="70dp"
     android:background="@drawable/zheng_selector" />
 <Button
     android:id="@+id/smart_btnstop"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginLeft="400dip"
-    android:layout_marginTop="100dp"
+    android:layout_marginTop="70dp"
     android:background="@drawable/ting_selector" />
 <Button
     android:id="@+id/smart_btnback"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginLeft="450dp"
-    android:layout_marginTop="100dp"
+    android:layout_marginTop="70dp"
     android:background="@drawable/fan_selector" />
 
 <Button
@@ -54,7 +54,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginLeft="150dp"
-    android:layout_marginTop="190dp"
+    android:layout_marginTop="160dp"
     android:text="补光系统："
     android:textSize="20dp"
      />
@@ -63,16 +63,16 @@
     android:id="@+id/pwmadd"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="378dp"
-    android:layout_marginTop="190dp"
+    android:layout_marginLeft="350dp"
+    android:layout_marginTop="160dp"
     android:text="补光" />
 
 <Button
     android:id="@+id/pwmjj"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="450dp"
-    android:layout_marginTop="190dp"
+    android:layout_marginLeft="420dp"
+    android:layout_marginTop="160dp"
     android:text="遮光" />
 
 <CheckBox
@@ -80,27 +80,38 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginLeft="350dp"
-    android:layout_marginTop="280dp"
-    android:text="CheckBox" />
+    android:layout_marginTop="250dp"
+    android:text="开启" />
 <Button
     android:id="@+id/xt_moshi"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginLeft="150dp"
-    android:layout_marginTop="280dp"
+    android:layout_marginTop="250dp"
     android:text="智 能 模 式"
     android:textSize="20dp"
      />
-<ImageButton 
-    android:id="@+id/alarmsetting" 
-	android:layout_width="100dp" 
-	android:layout_height="45dp" 
-	android:scaleType="fitXY"
-	android:background="#00000000"
-	android:layout_marginLeft="480dp"
-	android:layout_marginTop="280dp"
-	android:src="@drawable/alarmset"
+
+<EditText
+    android:id="@+id/et_wendu"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="500dp"
+    android:layout_marginTop="250dp"
+    android:hint="最高温度值"
+    android:inputType="number"
     />
+
+
+<EditText
+    android:id="@+id/et_guang"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="500dp"
+    android:layout_marginTop="300dp"
+    android:hint="最低光照值"
+    />
+
 
 
 </FrameLayout>

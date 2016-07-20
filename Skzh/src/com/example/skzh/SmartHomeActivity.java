@@ -1,6 +1,7 @@
 
 package com.example.skzh;
 
+import com.example.skzh.SmartVideo;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -25,6 +26,7 @@ import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewDebug.FlagToString;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -140,9 +142,11 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 				
 				//智能模式的判断
 				if(SmartVideo.isms == true){
-					System.out.println("hhhh");
-					if(sh_wen >= 30){
+					//智能温度
+					if(sh_wen >= SmartVideo.sz_wendu){
+						
 						if(bFlgContrlcmd == false){
+							System.out.println("zidongkaidianji");
 							cmd[4] = 0x0a;
 							//下发控制指令标志
 					        byte suma=0;
@@ -170,9 +174,13 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 							}
 						}
 					}
-					if(sh_guang <= 60.0){
+					
+					//自动光照
+					if(sh_guang <= SmartVideo.sz_guang){
+						
 						//判断pwm是否是关的
 						if(bFlgpwm == false){
+							System.out.println("kgkgkgkgkgkgkgkg");
 							cmd2[4] = 0x08;
 							//下发控制指令标志
 					        byte suma=0;
@@ -199,8 +207,37 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 								e.printStackTrace();
 							}
 						}					
+					}else{
+						//判断pwm是否是开的
+						if(bFlgpwm == true){
+							cmd2[4] = 0x00;
+							//下发控制指令标志
+					        byte suma=0;
+					        for (int i = 0; i < cmd2.length-1; i++) 
+					         {
+					     	 suma+= cmd2[i];
+					         }
+					        cmd2[cmd2.length-1] = suma; 
+					       
+								try {
+									mOutputStream.write(cmd2);
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								
+							bFlgpwm = false;
+							 //socket发送
+		            	    try {
+								writer.write("gpwm");
+								writer.flush();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}				
 					}
-				}
+				}//模式之中
 				
 				
 				
@@ -261,7 +298,7 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 					
 					//判断pwm是否是开的
 					if(bFlgpwm == false){
-						cmd2[4] = 0x08;
+						cmd2[4] = 0x06;
 						//下发控制指令标志
 				        byte suma=0;
 				        for (int i = 0; i < cmd2.length-1; i++) 
@@ -279,6 +316,7 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 							}
 							
 						bFlgpwm = true;
+					    SmartVideo.num=30;
 					}					
                 }
 				else if (values[0].equals("pwmguan")) {
@@ -303,6 +341,7 @@ public class SmartHomeActivity extends Activity implements OnClickListener{
 							}
 							
 						bFlgpwm = false;
+						SmartVideo.num=0;
 					}					
                 }
 				

@@ -186,10 +186,11 @@ public final class R {
         public static final int zheng_selector=0x7f02009e;
     }
     public static final class id {
-        public static final int action_settings=0x7f090018;
-        public static final int alarmsetting=0x7f090017;
+        public static final int action_settings=0x7f090019;
         public static final int button1=0x7f090000;
         public static final int checkBox=0x7f090015;
+        public static final int et_guang=0x7f090018;
+        public static final int et_wendu=0x7f090017;
         public static final int etalarmset=0x7f090001;
         public static final int pwmadd=0x7f090013;
         public static final int pwmjj=0x7f090014;
