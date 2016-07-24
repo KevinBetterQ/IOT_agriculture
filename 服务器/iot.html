@@ -1,0 +1,127 @@
+﻿
+<html>
+	<head>
+	<title>iot</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	</head>
+
+	<body background="background.jpg" >
+		
+		<h1 align="center">环境检测</h1> 
+		<center>
+		<!-- 在HTML中使用以下标记嵌入script脚本 -->
+		
+		
+		<p id="searchResult">数据显示区，等待刷新......</p>
+		 <p id="test">测试区</p>
+		
+		
+		</center>
+		
+		<h1 align="center">控制管理</h1>
+		<h2><font color="#0000CD">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+		&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+		&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+		&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+		&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+		通风系统：</h2>
+		<center>
+		<button id="kmotor">打开</button>
+		<button id="gmotor">关闭</button>
+		</center>
+		
+		<h2><font color="gold">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+		&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+		&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+		&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+		&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+		补光系统：</h2>
+		<center>
+		<button id="kpwm">补光</button>
+		<button id="gpwm">关闭</button>
+		</center>
+		
+		<script>
+		
+		window.onload = function(){
+			flush();
+		};
+		
+		//刷新函数
+		function flush(){ 
+			var request = new XMLHttpRequest();
+			request.open("GET", "iot.php");
+			request.send();
+			request.onreadystatechange = function() {//获取数据
+				if (request.readyState===4) {
+					if (request.status===200) { 
+						document.getElementById("searchResult").innerHTML = request.responseText;//显示数据
+					} else {
+						alert("发生错误：" + request.status);
+					}
+				} 
+			}
+		}
+		
+		//发送命令
+		document.getElementById("kmotor").onclick = function() { 
+		document.getElementById("test").innerHTML = "kmotor";//显示数据
+			var request = new XMLHttpRequest();
+			request.open("POST", "iot.php");
+			var data = "kmotor="+"1";
+			request.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+			request.send(data);
+			request.onreadystatechange = function() {
+		if (request.readyState===4) {
+			if (request.status===200) { 
+				document.getElementById("test").innerHTML = request.responseText;
+			} else {
+				alert("发生错误：" + request.status);
+			}
+		} 
+	}
+		}
+		
+		document.getElementById("gmotor").onclick = function() { 
+		document.getElementById("test").innerHTML = "gmotor";//显示数据
+			var request = new XMLHttpRequest();
+			request.open("POST", "iot.php");
+			var data = "gmotor";
+			request.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+			request.send(data);
+			if (request.readyState===4) {
+			if (request.status===200) { 
+				document.getElementById("test").innerHTML = request.responseText;
+			} else {
+				alert("发生错误：" + request.status);
+			}
+		} 
+		}
+		
+		document.getElementById("kpwm").onclick = function() { 
+		document.getElementById("test").innerHTML = "kpwm";//显示数据
+			var request = new XMLHttpRequest();
+			request.open("POST", "iot.php");
+			var data = "kpwm=";
+			request.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+			request.send(data);
+		}
+		
+		document.getElementById("gpwm").onclick = function() { 
+		document.getElementById("test").innerHTML = "gmotor";//显示数据
+			var request = new XMLHttpRequest();
+			request.open("POST", "iot.php");
+			var data = "gpwm=";
+			request.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+			request.send(data);
+		}
+		
+		//定时执行flush函数刷新
+		window.setInterval(flush, 1000);
+		
+		</script>
+		
+		
+		
+	</body>
+</html>
