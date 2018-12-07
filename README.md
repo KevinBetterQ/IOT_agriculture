@@ -29,7 +29,7 @@
 
 * 功能介绍
 
-<img src="images/function.png" width = 50% height = 30% div align=center />
+<img src="images/function.png" width = 35% height = 35% div align=center />
 
 ## 系统展示
 - Android网关
