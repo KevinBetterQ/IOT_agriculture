@@ -18,29 +18,29 @@
 ## 代码目录：  
 - `/Skzh/` ---- Android网关程序，实现串口通信，socket传输，网关控制  
 - `/Server/`  
-	`tcp.php` ---- PHP服务器，进行socket通信，与数据库存取  
-	`test.php` ---- 网页控制端，但没有无闪烁刷新  
-	`iot.html和iot.php` --- 改进的网页控制端，实现无闪烁刷新  
+  `tcp.php` ---- PHP服务器，进行socket通信，与数据库存取  
+  `test.php` ---- 网页控制端，但没有无闪烁刷新  
+  `iot.html和iot.php` --- 改进的网页控制端，实现无闪烁刷新  
 
 ## 概览
 * 系统模型
 
-![funcImage](images/sysArch.png)
+<img src="images/sysArch.png" width = 60% height = 60% div align=center />
 
 * 功能介绍
 
-![funcImage](images/function.png)
+<img src="images/function.png" width = 50% height = 30% div align=center />
 
 ## 系统展示
 - Android网关
 
-![funcImage](show1.jpg)
+<img src="images/show1.png" width = 50% height = 50% div align=center />
 
-![funcImage](show2.jpg)
+<img src="images/show2.png" width = 50% height = 50% div align=center />
 
 - 网页界面
 
-![funcImage](show3.jpg)
+<img src="images/show3.png" width = 60% height = 60% div align=center />
 
 ## Authors
 qiwenkaikai@qq.com
